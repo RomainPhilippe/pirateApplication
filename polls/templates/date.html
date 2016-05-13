@@ -1,0 +1,16 @@
+
+{% load leaflet_tags %}
+
+<head>
+
+    {% leaflet_js %}
+    {% leaflet_css %}
+</head>
+<body>
+<h1>Bienvenue sur mon blog</h1>
+<p>La date actuelle est : {{ date }}</p>
+
+{% leaflet_map "yourmap" %}
+
+
+</body>
