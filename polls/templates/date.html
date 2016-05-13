@@ -1,12 +1,18 @@
 
 {% load leaflet_tags %}
 
-<head>
+<!DOCTYPE html>
 
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title of the document</title>
     {% leaflet_js %}
     {% leaflet_css %}
 </head>
+
 <body>
+
 <h1>Bienvenue sur mon blog</h1>
 <p>La date actuelle est : {{ date }}</p>
 
@@ -14,3 +20,4 @@
 
 
 </body>
+</html>
