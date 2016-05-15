@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.db import models
@@ -17,4 +18,4 @@ class Area(models.Model):
         nous permettra de reconnaître facilement les différents objets que
         nous traiterons plus tard et dans l'administration
         """
-        return self.titre
+        return self.zone

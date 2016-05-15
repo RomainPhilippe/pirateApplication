@@ -15,3 +15,9 @@ pirateApplication/__init__.pyc
 pirateApplication/__init__.pyc
 
 pirateApplication/settings.pyc
+
+*.pyc
+
+*.pyc
+
+pirateApplication/urls.pyc
