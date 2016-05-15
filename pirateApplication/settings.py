@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'polls',
     'leaflet',
+    'bootstrap3',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -121,3 +122,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+LEAFLET_CONFIG = {
+    # conf here
+    'DEFAULT_CENTER': (10.0, 45.0),
+    'DEFAULT_ZOOM': 5,
+    'TILES': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+}
+
+STATICFILES_DIRS = ("/polls/templates/js", )

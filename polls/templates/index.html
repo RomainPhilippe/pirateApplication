@@ -1,0 +1,66 @@
+
+{% load leaflet_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title of the document</title>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
+
+
+    <!--<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>-->
+
+
+    {% leaflet_js %}
+    {% leaflet_css %}
+
+    <style>
+
+        .leaflet-container {  /* all maps */
+            width:  700px;
+            height: 400px;
+        }
+
+        #specialbigmap {
+            height: 800px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<script type="text/javascript">
+    function map_init_basic (map, options) {
+        console.log("test");
+        L.marker([50.5, 30.5]).addTo(map);
+    }
+</script>
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-md-5">
+                <h1>Pirat attack prediction</h1>
+                <p>La date actuelle est : {{ date }}</p>
+
+
+
+            </div>
+
+
+            <div class="col-md-7">
+                {% leaflet_map "map" callback="window.map_init_basic" %}
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

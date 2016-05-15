@@ -8,4 +8,4 @@ def index(request):
 
 def date_actuelle(request):
     print "date_actuelle"
-    return render(request, 'date.html', {'date': datetime.now()})
+    return render(request, 'index.html', {'date': datetime.now()})
