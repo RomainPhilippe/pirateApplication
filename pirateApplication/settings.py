@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'polls',
+    'map',
     'leaflet',
 ]
 
@@ -130,4 +130,4 @@ LEAFLET_CONFIG = {
     'TILES': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 }
 
-STATICFILES_DIRS = ("/polls/templates/js", )
+STATICFILES_DIRS = ("/map/templates/js", )
