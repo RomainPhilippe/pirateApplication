@@ -70,6 +70,10 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
 WSGI_APPLICATION = 'pirateApplication.wsgi.application'
 
 
