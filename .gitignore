@@ -23,3 +23,5 @@ pirateApplication/urls.pyc
 *.pyc
 
 pirateApplication/urls.pyc
+
+*.pyc
