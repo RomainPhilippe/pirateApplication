@@ -18,4 +18,8 @@ pirateApplication/settings.pyc
 
 pirateApplication/urls.pyc
 
+*.pyc
+
+*.pyc
+
 pirateApplication/urls.pyc
