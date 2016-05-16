@@ -4,12 +4,14 @@ from django.http import HttpResponse
 from datetime import datetime
 from django.shortcuts import render
 
+import numpy as np
+
 from map.models import Area
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
-#from map.forms import InputForm
-from map.forms import ContactForm
+from map.forms import InputForm
+#from map.forms import ContactForm
 
 
 def index(request):
@@ -48,38 +50,23 @@ def get_list_areas(request):
 
     #return render(request, 'index.html', {'date': datetime.now(), 'list_area': areas})
 
-#def choose(request):
-#    if request.method == 'POST':  # S'il s'agit d'une requête POST
-#       form = InputForm(request.POST)  # Nous reprenons les données
-
-#        if form.is_valid(): # Nous vérifions que les données envoyées sont valides
-
-            # Ici nous pouvons traiter les données du formulaire
-#            boatType = form.cleaned_data['boatType']
-            #fortnight = form.cleaned_data['fortnight']
-            #piratingActivity = form.cleaned_data['piratingActivity']
-            #clusteringType = form.cleaned_data['ChoiceField']
-
-#    else: # Si ce n'est pas du POST, c'est probablement une requête GET
-#        form = InputForm()  # Nous créons un formulaire vide
-
-#    return render(request, 'index.html', locals())
-
 
 def contact(request):
-    print "views.CONTACT"
 
     if request.method == 'POST':  # S'il s'agit d'une requête POST
-        form = ContactForm(request.POST)  # Nous reprenons les données
-        print("POST.CONTACT")
+        form = InputForm(request.POST)  # Nous reprenons les données
 
         if form.is_valid(): # Nous vérifions que les données envoyées sont valides
-            print "if.views.CONTACT"
             # Ici nous pouvons traiter les données du formulaire
-            sujet = form.cleaned_data['sujet']
-            message = form.cleaned_data['message']
-            envoyeur = form.cleaned_data['envoyeur']
-            renvoi = form.cleaned_data['renvoi']
+            boatType = form.cleaned_data['boatType']
+            month = form.cleaned_data['month']
+            fortnight = form.cleaned_data['fortnight']
+            activity = form.cleaned_data['activity']
+
+            print "boat type : "+str(boatType)
+            print "month : "+str(month)
+            print "fortnight : "+str(fortnight)
+            print "activity : "+str(activity)
 
             # Nous pourrions ici envoyer l'e-mail grâce aux données que nous venons de récupérer
 
@@ -88,9 +75,14 @@ def contact(request):
             print("pas valide mais ok")
 
     else: # Si ce n'est pas du POST, c'est probablement une requête GET
-        print "else.views.CONTACT"
-        form = ContactForm()  # Nous créons un formulaire vide
+        form = InputForm()  # Nous créons un formulaire vide
 
-    print("return")
+    date=datetime.now()
 
+    areas = Area.objects.all().values_list('zone', 'min_lat','max_lat','min_lon','max_lon') # Nous sélectionnons toutes nos zones
+    list_area=unicode(json.dumps(list(areas)))
+
+    #list_area=[['A', 14.842, 16.049, 41.22, 42.47]]
+    print "list_area", list_area
+    print "type(list_area)", type(list_area)
     return render(request, 'index.html', locals())

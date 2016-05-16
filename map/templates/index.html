@@ -16,8 +16,8 @@
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 
 
-    {% leaflet_js %}
-    {% leaflet_css %}
+    {% leaflet_js plugins="forms"%}
+    {% leaflet_css plugins="forms"%}
 
     <style>
 
@@ -35,11 +35,43 @@
 
 <body>
 
+{% if envoi %}
+    <script type="text/javascript">
+
+
+        function map_init_basic (map, options) {
+
+            //alert('init form');
+
+            var list="{{ list_area }}";
+            list=list.replace(/&quot;/g, "'");
+
+            var listAreas = eval(list);
+            console.log(listAreas)
+
+            for(var i = 0; i < listAreas.length; i++) {
+                var area = listAreas[i];
+
+                    var polygon = L.polygon([
+                        [area[1], area[3]],
+                        [area[1], area[4]],
+                        [area[2], area[4]],
+                        [area[2], area[3]]
+                    ]).addTo(map);
+
+            }
+        }
+
+
+
+    </script>
+
+{% else %}
 
 <script type="text/javascript">
     function map_init_basic (map, options) {
 
-        //var test={{ date }}
+        //alert('init begin');
 
         var polygon = L.polygon([
             [14.842, 41.22],
@@ -48,13 +80,14 @@
             [16.049, 41.22]
         ]).addTo(map);
     }
+</script>
 
+{% endif %}
+
+<script type="text/javascript">
     function sendParameters() {
-
         var email = $("#id_envoyeur").val();
         alert(email);
-
-
         $.ajax({
             url : "list_area", // the endpoint
             type : "GET", // http method
@@ -75,21 +108,6 @@
     }
 
 
-    $.ajax({
-        url : "list_area", // the endpoint
-        type : "GET", // http method
-        data : {'email':'romain.philippe78@free.fr'},
-        // handle a successful response
-        success : function(json) {
-            console.log(json); // log the returned json to the console
-        },
-        // handle a non-successful response
-        error : function(xhr,errmsg,err) {
-            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-        }
-    });
 
 
 </script>
@@ -112,19 +130,14 @@
                 {% endfor %}
 
 
-                {% if envoi %}Votre message a bien été envoyé !{% endif %}
+
 
                 <form action="{% url "map.views.contact" %}" method="post">
                     {% csrf_token %}
-                    <!--
-                    <p><label for="id_sujet">Sujet:</label> <input id="id_sujet" type="text" name="sujet" maxlength="100" /></p>
-                    <p><label for="id_message">Message:</label> <textarea id="id_message" rows="10" cols="40" name="message"></textarea></p>
-                    <p><label for="id_envoyeur">Votre adresse mail:</label> <input type="text" name="envoyeur" id="id_envoyeur" /></p>
-                    <p><label for="id_renvoi">Renvoi:</label> <input type="checkbox" name="renvoi" id="id_renvoi" /> <span class="helptext">Cochez si vous souhaitez obtenir une copie du mail envoyé.</span></p>
-                    -->
                     {{ form.as_p }}
+                    <input type="submit" value="Submit" />
                 </form>
-                <button onclick="sendParameters()">Click me</button>
+                <!--<button onclick="sendParameters()">Click me</button>-->
             </div>
 
 
