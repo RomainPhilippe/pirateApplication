@@ -19,3 +19,20 @@ class Area(models.Model):
         nous traiterons plus tard et dans l'administration
         """
         return self.zone
+
+class MatrixAggregation(models.Model):
+    zone = models.CharField(max_length=3)
+    count = models.IntegerField()
+    month = models.IntegerField()
+    activity = models.IntegerField()
+    fortnight = models.IntegerField()
+    boatType = models.TextField()
+    id_zone = models.ForeignKey('Area')
+
+    def __str__(self):
+        """
+        Cette méthode que nous définirons dans tous les modèles
+        nous permettra de reconnaître facilement les différents objets que
+        nous traiterons plus tard et dans l'administration
+        """
+        return self.zone
