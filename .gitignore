@@ -25,3 +25,5 @@ pirateApplication/urls.pyc
 pirateApplication/urls.pyc
 
 *.pyc
+
+pirateApplication/wsgi.pyc

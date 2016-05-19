@@ -79,6 +79,7 @@ def contact(request):
 
     date=datetime.now()
 
+    #TODO : appeler classe pour construire tableau (dataframe) prédiction
     areas = Area.objects.all().values_list('zone', 'min_lat','max_lat','min_lon','max_lon') # Nous sélectionnons toutes nos zones
     list_area=unicode(json.dumps(list(areas)))
 

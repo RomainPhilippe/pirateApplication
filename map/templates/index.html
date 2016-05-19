@@ -51,13 +51,19 @@
 
             for(var i = 0; i < listAreas.length; i++) {
                 var area = listAreas[i];
+                var num = i;
+                var n = num.toString();
 
                     var polygon = L.polygon([
                         [area[1], area[3]],
                         [area[1], area[4]],
                         [area[2], area[4]],
                         [area[2], area[3]]
-                    ]).addTo(map);
+                    ],{
+                        color : 'blue'
+                    }).addTo(map);
+
+                polygon.bindPopup("Zone " + area[0]);
 
             }
         }
@@ -71,15 +77,31 @@
 <script type="text/javascript">
     function map_init_basic (map, options) {
 
-        //alert('init begin');
+        var list="{{ list_area }}";
+        list=list.replace(/&quot;/g, "'");
 
-        var polygon = L.polygon([
-            [14.842, 41.22],
-            [14.842, 42.47],
-            [16.049, 42.47],
-            [16.049, 41.22]
-        ]).addTo(map);
+        var listAreas = eval(list);
+        console.log(listAreas)
+
+        for(var i = 0; i < listAreas.length; i++) {
+            var area = listAreas[i];
+            var num = i;
+            var n = num.toString();
+
+            var polygon = L.polygon([
+                [area[1], area[3]],
+                [area[1], area[4]],
+                [area[2], area[4]],
+                [area[2], area[3]]
+            ],{
+                color : '#0af'
+            }).addTo(map);
+
+            polygon.bindPopup("Zone " + area[0]);
+
+        }
     }
+
 </script>
 
 {% endif %}

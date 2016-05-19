@@ -20,14 +20,13 @@ class Area(models.Model):
         """
         return self.zone
 
-class MatrixAggregation(models.Model):
-    zone = models.CharField(max_length=3)
-    count = models.IntegerField()
-    month = models.IntegerField()
+class AreaHand(models.Model):
     activity = models.IntegerField()
+    area = models.CharField(max_length=3)
+    count = models.IntegerField()
     fortnight = models.IntegerField()
+    month = models.IntegerField()
     boatType = models.TextField()
-    id_zone = models.ForeignKey('Area')
 
     def __str__(self):
         """
