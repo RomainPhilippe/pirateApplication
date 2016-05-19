@@ -36,12 +36,11 @@
 <body>
 
 {% if envoi %}
+    <p> Datas : {{ datas }}</p>
+
     <script type="text/javascript">
 
-
         function map_init_basic (map, options) {
-
-            //alert('init form');
 
             var list="{{ list_area }}";
             list=list.replace(/&quot;/g, "'");
@@ -67,9 +66,6 @@
 
             }
         }
-
-
-
     </script>
 
 {% else %}

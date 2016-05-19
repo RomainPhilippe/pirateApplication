@@ -21,12 +21,14 @@ class Area(models.Model):
         return self.zone
 
 class AreaHand(models.Model):
-    activity = models.IntegerField()
+    # TODO : recharger la base via le csv avant de rendre le projet
     area = models.CharField(max_length=3)
     count = models.IntegerField()
     fortnight = models.IntegerField()
     month = models.IntegerField()
     boatType = models.TextField()
+    year = models.IntegerField()
+    activity = models.IntegerField()
 
     def __str__(self):
         """

@@ -3,7 +3,7 @@
 from django import forms
 
 class InputForm(forms.Form):
-    #todo : récupérer les types de bateaux dans la base
+    # TODO : récupérer les types de bateaux dans la base
     CHOICES = (('1','Carrier'),('2','Tanker'), ('3','Ro-Ro'))
     boatType = forms.ChoiceField(choices=CHOICES)
     month = forms.IntegerField()
