@@ -8,14 +8,11 @@ import numpy as np
 import pandas as pd
 
 from map.models import Area
+from map.models import AreaHand
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
 from map.forms import InputForm
-
-
-# from map.forms import ContactForm
-
 
 def index(request):
     print "index"
@@ -84,39 +81,31 @@ def contact(request):
     areasId = Area.objects.all().values_list('zone', flat=True)
     list_areasId = [entry for entry in areasId]
 
-    # TODO : appeler classe pour construire tableau (dataframe) prédiction
     get_datas(list_areasId, params)
 
     return render(request, 'index.html', locals())
 
 
 def get_datas(list_areasId, params):
-    # TODO : vérifier la valeur max dans la base
     size = len(list_areasId)
-    print size
-    print len(params)
 
-    ColYears = np.repeat(2015, size)
+    maxYear = max(AreaHand.objects.all().values_list('year', flat=True))
+
+    ColYears = np.repeat(maxYear + 1, size)
     ColArea = list_areasId
-    if(len(params) > 3):
+    if (len(params) > 3):
         ColMonth = np.repeat(params[1], size)
-        ColFortnight = np.repeat(params[2],size)
-        ColType = np.repeat(params[0],size)
-        ColActivity = np.repeat(params[3],size)
+        ColFortnight = np.repeat(params[2], size)
+        ColType = np.repeat(params[0], size)
+        ColActivity = np.repeat(params[3], size)
     else:
         ColMonth = np.repeat(0, size)
-        ColFortnight = np.repeat(0,size)
-        ColType = np.repeat(0,size)
-        ColActivity = np.repeat(0,size)
+        ColFortnight = np.repeat(0, size)
+        ColType = np.repeat(0, size)
+        ColActivity = np.repeat(0, size)
 
     dic = {'Years': ColYears, 'Month': ColMonth, 'Fortnight': ColFortnight, 'Area': ColArea, 'Type': ColType,
            'Activity': ColActivity}
     dfArea = pd.DataFrame(dic)
 
-    #    datas = []
-    #    for i in range(0,len(areasId)):
-    #        datas.append(areasId[i])
-    #        for j in range(0,len(params)):
-    #            datas.append(params[j])
-    print dfArea
     return dfArea
