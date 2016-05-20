@@ -107,5 +107,5 @@ def get_datas(list_areasId, params):
     dic = {'Years': ColYears, 'Month': ColMonth, 'Fortnight': ColFortnight, 'Area': ColArea, 'Type': ColType,
            'Activity': ColActivity}
     dfArea = pd.DataFrame(dic)
-
+    print dfArea
     return dfArea
