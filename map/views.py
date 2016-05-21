@@ -54,7 +54,7 @@ def getPrediction(dfTrain,dfTest,features,target,nb_esti=250,nb_features=1):
     model = RandomForestClassifier(random_state=1,n_estimators=nb_esti,max_features=nb_features)
     model=model.fit(dfTrain[features], dfTrain[target])
     predictions=model.predict(dfTest[features])
-    probabilities=model.predict_proba(dfTest[features])
+    probabilities=model.predict_proba(dfTest[features])[:, 1]
     return predictions,probabilities
 
 #############################################################################
