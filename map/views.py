@@ -32,16 +32,19 @@ def bool_attack(count):
 def binaryColumn(df,uniqueArea,uniqueType):
     featureBinary=[]
     for i in range(0,len(uniqueArea)):
-        nameColArea='Area_'+str(uniqueArea[i])
+        nameColArea='area_'+str(uniqueArea[i])
         df[nameColArea]=0
         featureBinary.append(nameColArea)
     for i in range(0,len(uniqueType)):
-        nameColType='Type_'+str(uniqueType[i])
+        nameColType='type_'+str(uniqueType[i])
         df[nameColType]=0
         featureBinary.append(nameColType)
+
+
     for index, row in df.iterrows():
-        df.set_value(index, "Area_"+str(row['Area']),1)
-        df.set_value(index, "Type_"+str(row['Type']),1)
+        df.set_value(index, "area_"+str(row['area']),1)
+        df.set_value(index, "type_"+str(row['boatType']),1)
+
 
     return df,featureBinary
 
@@ -120,7 +123,9 @@ def contact(request):
     areasId = Area.objects.all().values_list('zone', flat=True)
     list_areasId = [entry for entry in areasId]
 
-    get_datas(list_areasId, params)
+    dfTest=get_datas(list_areasId, params)
+
+    predict=getTabPrediction(dfTest)
 
     return render(request, 'index.html', locals())
 
@@ -144,34 +149,41 @@ def get_datas(list_areasId, params):
         ColActivity = np.repeat(0, size)
 
     # creation test dataframe in order to get predicions
-    dic = {'Years': ColYears, 'Month': ColMonth, 'Fortnight': ColFortnight, 'Area': ColArea, 'Type': ColType,
-           'Activity': ColActivity}
+    dic = {'year': ColYears, 'month': ColMonth, 'fortnight': ColFortnight, 'area': ColArea, 'boatType': ColType,
+           'activity': ColActivity}
     dfTest = pd.DataFrame(dic)
 
+    return dfTest
+
+
+def getTabPrediction(dfTest):
     # we get train dataframe from database
     dfAreaHand = pd.DataFrame(list(AreaHand.objects.all().values()))
-    #dfAreaHand['Attack'] = dfAreaHand.apply(lambda row: bool_attack(row['Count']), axis=1)
+    dfAreaHand['attack'] = dfAreaHand.apply(lambda row: bool_attack(row['count']), axis=1)
+
+
+    # transformations ...
+    uniqueArea=dfAreaHand["area"].unique()
+    uniqueType=dfAreaHand["boatType"].unique()
+
+    dfAreaHand,featureBinary=binaryColumn(dfAreaHand,uniqueArea,uniqueType)
+    dfTest,featureBinary=binaryColumn(dfTest,uniqueArea,uniqueType)
+
+
+    # Columns important for the ML machine learning
+    features=['activity','fortnight','month','year']
+    features=np.concatenate([features,featureBinary]).tolist()
+    target='attack'
+
+    print features
+
     print "Train dataset : "
     print dfAreaHand.head()
 
-    # transformations ...
-    #uniqueArea=dfAreaHand["Area"].unique()
-    #uniqueType=dfAreaHand["Type"].unique()
+    print "dfTest : "
+    print dfTest.head()
 
-    #dfAreaHand,featureBinary=binaryColumn(dfAreaHand,uniqueArea,uniqueType)
-    #dfTest,featureBinary=binaryColumn(dfTest,uniqueArea,uniqueType)
+    predictions=getPrediction(dfAreaHand,dfTest,features,target)
+    print predictions
 
-    #print dfTest
-
-    # Columns important for the ML machine learning
-    #features=['Activity','Fortnight','Month','Years']
-    #features=np.concatenate([features,featureBinary]).tolist()
-    #target='Attack'
-
-    #print features
-
-
-    #predictions=getPrediction(dfAreaHand,dfTest,features,target)
-    #print predictions
-
-    return dfTest
+    return predictions
