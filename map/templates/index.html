@@ -7,13 +7,16 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Title of the document</title>
+    <title>Pirate Attack Prediction</title>
 
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-2.2.3.min.js' %}"></script>
 
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <!-- CSS general -->
+    <link rel="stylesheet" href="style.css" />
 
 
     {% leaflet_js plugins="forms"%}
@@ -137,22 +140,23 @@
                 <h1>Pirat attack prediction</h1>
                 <p>La date actuelle est : {{ date }}</p>
 
+                <!---
                 La liste des zones :
-                {% for area in list_area %}
+                {#% for area in list_area %#}
                     <div class="article">
-                        <h3>{{ area.zone }}</h3>
+                        <h3>{#  #}{ area.zone }}</h3>
                     </div>
-                {% empty %}
+                {#% empty %#}
                     <p>Aucun article.</p>
-                {% endfor %}
-
+                {#% endfor %#}
+                --->
 
 
 
                 <form action="{% url "map.views.contact" %}" method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Afficher la carte" />
                 </form>
                 <!--<button onclick="sendParameters()">Click me</button>-->
             </div>
