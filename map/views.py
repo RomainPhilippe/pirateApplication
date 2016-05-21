@@ -6,6 +6,7 @@ from django.shortcuts import render
 
 import numpy as np
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier,GradientBoostingClassifier
 
 from map.models import Area
 from map.models import AreaHand
@@ -17,6 +18,43 @@ from map.forms import InputForm
 def index(request):
     print "index"
     return HttpResponse("Hello, world. You're at the polls index.")
+
+#############################################################################
+#############################################################################
+# ML function
+def bool_attack(count):
+    if count>0:
+        return 1
+    else:
+        return 0
+
+
+def binaryColumn(df,uniqueArea,uniqueType):
+    featureBinary=[]
+    for i in range(0,len(uniqueArea)):
+        nameColArea='Area_'+str(uniqueArea[i])
+        df[nameColArea]=0
+        featureBinary.append(nameColArea)
+    for i in range(0,len(uniqueType)):
+        nameColType='Type_'+str(uniqueType[i])
+        df[nameColType]=0
+        featureBinary.append(nameColType)
+    for index, row in df.iterrows():
+        df.set_value(index, "Area_"+str(row['Area']),1)
+        df.set_value(index, "Type_"+str(row['Type']),1)
+
+    return df,featureBinary
+
+
+
+def getPrediction(dfTrain,dfTest,features,target,nb_esti=250,nb_features=1):
+    model = RandomForestClassifier(random_state=1,n_estimators=nb_esti,max_features=nb_features)
+    model=model.fit(dfTrain[features], dfTrain[target])
+    predictions=model.predict(dfTest[features])
+    return predictions
+
+#############################################################################
+#############################################################################
 
 
 def date_actuelle(request):
@@ -76,6 +114,7 @@ def contact(request):
     areas = Area.objects.all().values_list('zone', 'min_lat', 'max_lat', 'min_lon',
                                            'max_lon')  # Nous sélectionnons toutes nos zones
 
+
     list_area = unicode(json.dumps(list(areas)))
 
     areasId = Area.objects.all().values_list('zone', flat=True)
@@ -104,8 +143,35 @@ def get_datas(list_areasId, params):
         ColType = np.repeat(0, size)
         ColActivity = np.repeat(0, size)
 
+    # creation test dataframe in order to get predicions
     dic = {'Years': ColYears, 'Month': ColMonth, 'Fortnight': ColFortnight, 'Area': ColArea, 'Type': ColType,
            'Activity': ColActivity}
-    dfArea = pd.DataFrame(dic)
-    print dfArea
-    return dfArea
+    dfTest = pd.DataFrame(dic)
+
+    # we get train dataframe from database
+    dfAreaHand = pd.DataFrame(list(AreaHand.objects.all().values()))
+    #dfAreaHand['Attack'] = dfAreaHand.apply(lambda row: bool_attack(row['Count']), axis=1)
+    print "Train dataset : "
+    print dfAreaHand.head()
+
+    # transformations ...
+    #uniqueArea=dfAreaHand["Area"].unique()
+    #uniqueType=dfAreaHand["Type"].unique()
+
+    #dfAreaHand,featureBinary=binaryColumn(dfAreaHand,uniqueArea,uniqueType)
+    #dfTest,featureBinary=binaryColumn(dfTest,uniqueArea,uniqueType)
+
+    #print dfTest
+
+    # Columns important for the ML machine learning
+    #features=['Activity','Fortnight','Month','Years']
+    #features=np.concatenate([features,featureBinary]).tolist()
+    #target='Attack'
+
+    #print features
+
+
+    #predictions=getPrediction(dfAreaHand,dfTest,features,target)
+    #print predictions
+
+    return dfTest
