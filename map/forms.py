@@ -26,7 +26,7 @@ class InputForm(forms.Form):
     CHOICES2 = (('1', 'Première quinzaine',), ('2', 'Seconde quinzaine',))
     fortnight = forms.ChoiceField(label='Quinzaine', choices=CHOICES2)
     # periode d'activite
-    CHOICES3 = (('2', 'Forte activité',), ('1', 'Faible activité',))
+    CHOICES3 = (('1', 'Faible activité',), ('2', 'Forte activité',))
     activity = forms.ChoiceField(label='Activité', choices=CHOICES3)
 
 class ContactForm(forms.Form):
