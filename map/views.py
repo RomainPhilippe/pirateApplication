@@ -54,7 +54,8 @@ def getPrediction(dfTrain,dfTest,features,target,nb_esti=250,nb_features=1):
     model = RandomForestClassifier(random_state=1,n_estimators=nb_esti,max_features=nb_features)
     model=model.fit(dfTrain[features], dfTrain[target])
     predictions=model.predict(dfTest[features])
-    return predictions
+    probabilities=model.predict_proba(dfTest[features])
+    return predictions,probabilities
 
 #############################################################################
 #############################################################################
@@ -125,7 +126,7 @@ def contact(request):
 
     dfTest=get_datas(list_areasId, params)
 
-    predict=getTabPrediction(dfTest)
+    predict,probabilities=getTabPrediction(dfTest)
 
     return render(request, 'index.html', locals())
 
@@ -183,7 +184,8 @@ def getTabPrediction(dfTest):
     print "dfTest : "
     print dfTest.head()
 
-    predictions=getPrediction(dfAreaHand,dfTest,features,target)
+    predictions,probabilities=getPrediction(dfAreaHand,dfTest,features,target)
     print predictions
+    print probabilities
 
-    return predictions
+    return predictions,probabilities
