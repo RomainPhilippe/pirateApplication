@@ -1,4 +1,3 @@
-
 {% load leaflet_tags %}
 {% load static %}
 
@@ -10,89 +9,46 @@
     <title>Pirate Attack Prediction</title>
 
     <!-- BOOTSTRAP -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
     <script type="text/javascript" src="{% static 'js/jquery-2.2.3.min.js' %}"></script>
-
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 
     <!-- CSS general -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 
+    <!-- leaflet -->
+    {% leaflet_js plugins="forms" %}
+    {% leaflet_css plugins="forms" %}
 
-    {% leaflet_js plugins="forms"%}
-    {% leaflet_css plugins="forms"%}
-
-    <style>
-
-        .leaflet-container {  /* all maps */
-            width:  700px;
-            height: 400px;
-        }
-
-        #specialbigmap {
-            height: 800px;
-        }
-
-    </style>
 </head>
 
 <body>
 
-{% if envoi %}
-
-    <script type="text/javascript">
-
-        function map_init_basic (map, options) {
-
-            var list="{{ list_area }}";
-            list=list.replace(/&quot;/g, "'");
-
-            var listAreas = eval(list);
-            console.log(listAreas)
-
-            for(var i = 0; i < listAreas.length; i++) {
-                var area = listAreas[i];
-                var num = i;
-                var n = num.toString();
-
-                    var polygon = L.polygon([
-                        [area[1], area[3]],
-                        [area[1], area[4]],
-                        [area[2], area[4]],
-                        [area[2], area[3]]
-                    ],{
-                        color : 'blue'
-                    }).addTo(map);
-
-                polygon.bindPopup("Zone " + area[0]);
-
-            }
-        }
-    </script>
-
-{% else %}
-
 <script type="text/javascript">
-    function map_init_basic (map, options) {
 
-        var list="{{ list_area }}";
-        list=list.replace(/&quot;/g, "'");
+    function map_init_basic(map, options) {
+        //création de la carte initiale à l'ouverture de la page
+        var list = "{{ list_area }}";
+        list = list.replace(/&quot;/g, "'");
 
         var listAreas = eval(list);
+        console.log("listAreas")
         console.log(listAreas)
 
-        for(var i = 0; i < listAreas.length; i++) {
+        for (var i = 0; i < listAreas.length; i++) {
             var area = listAreas[i];
             var num = i;
             var n = num.toString();
 
             var polygon = L.polygon([
-                [area[1], area[3]],
-                [area[1], area[4]],
-                [area[2], area[4]],
-                [area[2], area[3]]
-            ],{
-                color : '#0af'
+                [parseFloat(area[1]), parseFloat(area[3])],
+                [parseFloat(area[1]), parseFloat(area[4])],
+                [parseFloat(area[2]), parseFloat(area[4])],
+                [parseFloat(area[2]), parseFloat(area[3])]
+            ], {
+                color: 'white',
+                fillOpacity: 0.6, //default = 0.5
+                weight: 3 //default = 5px
             }).addTo(map);
 
             polygon.bindPopup("Zone " + area[0]);
@@ -100,47 +56,111 @@
         }
     }
 
-</script>
+    function map_with_probabilities(map, options) {
+        //configuration de la carte après l'appel de l'algo de ML
+        var list = "{{ list_area }}";
+        list = list.replace(/&quot;/g, "'");
 
-{% endif %}
+        var listAreas = eval(list);
+        console.log(listAreas)
 
-<script type="text/javascript">
+        for (var i = 0; i < listAreas.length; i++) {
+            var area = listAreas[i];
+            colorArea = get_color(parseFloat(area[5]));
+            var num = i;
+            var n = num.toString();
+
+            var polygon = L.polygon([
+                [parseFloat(area[1]), parseFloat(area[3])],
+                [parseFloat(area[1]), parseFloat(area[4])],
+                [parseFloat(area[2]), parseFloat(area[4])],
+                [parseFloat(area[2]), parseFloat(area[3])]
+            ], {
+                color: colorArea,
+                fillOpacity: 0.3, //default = 0.5
+                weight: 3 //default = 5px
+            }).addTo(map);
+
+            polygon.bindPopup("P = " + parseFloat(area[5]));
+        }
+    }
+
+    function get_color(proba, options) {
+        //récupération de la couleur de la zone en fonction de la probabilité d'attaque
+        if (proba == 0) {
+            //gris
+            return 'grey'
+        } else if (proba < 0.1) {
+            //bleu foncé
+            return '#4105b4';
+        } else if (proba < 0.2) {
+            //bleu
+            return '#048cfc';
+        } else if (proba < 0.3) {
+            //bleu clair
+            return '#44f4fc';
+        } else if (proba < 0.4) {
+            //vert
+            return '#a0fe44';
+        } else if (proba < 0.5) {
+            //vert clair
+            return '#44fe64';
+        } else if (proba < 0.6) {
+            //jaune
+            return '#fbf63c';
+        } else if (proba < 0.7) {
+            //jaune orangé
+            return '#ff9900';
+        } else if (proba < 0.8) {
+            //orange
+            return '#fca044';
+        } else if (proba < 0.9) {
+            //rouge
+            return '#fb4444';
+        } else {
+            //rouge foncé
+            return '#fb1e1e';
+        }
+
+    }
+
     function sendParameters() {
+        // todo : à supprimer à terme
         var email = $("#id_envoyeur").val();
         alert(email);
         $.ajax({
-            url : "list_area", // the endpoint
-            type : "GET", // http method
-            data : {'email':'romain.philippe78@free.fr'},
+            url: "list_area", // the endpoint
+            type: "GET", // http method
+            data: {'email': 'romain.philippe78@free.fr'},
             // handle a successful response
-            success : function(json) {
+            success: function (json) {
                 console.log(json); // log the returned json to the console
             },
             // handle a non-successful response
-            error : function(xhr,errmsg,err) {
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+            error: function (xhr, errmsg, err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
                         " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
                 console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
             }
         });
-
-
     }
 
-
-
+    function on_click() {
+        //indicateur de chargement
+        $("#spinner").show()
+    }
 
 </script>
 
-    <div class="container-fluid">
+<div class="container-fluid">
 
-        <div class="row">
+    <div class="row">
 
-            <div class="col-md-5">
-                <h1>Pirat attack prediction</h1>
-                <p>La date actuelle est : {{ date }}</p>
+        <div class="col-md-5">
+            <h1>Pirate attacks prediction</h1>
+            <p>La date actuelle est : {{ date }}</p>
 
-                <!---
+            <!---
                 La liste des zones :
                 {#% for area in list_area %#}
                     <div class="article">
@@ -152,21 +172,30 @@
                 --->
 
 
+            <form action="{% url "map.views.contact" %}" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Afficher la carte" onclick="on_click()"/>
+            </form>
 
-                <form action="{% url "map.views.contact" %}" method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <input type="submit" value="Afficher la carte" />
-                </form>
-                <!--<button onclick="sendParameters()">Click me</button>-->
+            <div id="spinner" class="spinner" style="display:none;">
+                    <img id="img-spinner" src="{% static 'img/ajax-loader.gif' %}" alt="Loading"/>
             </div>
+            <!--<button onclick="sendParameters()">Click me</button>-->
+        </div>
 
 
-            <div class="col-md-7">
+        <div class="col-md-7">
+            {% if envoi %}
+                {% leaflet_map "map" callback="window.map_with_probabilities" %}
+            {% else %}
                 {% leaflet_map "map" callback="window.map_init_basic" %}
-            </div>
+            {% endif %}
+
+
         </div>
     </div>
+</div>
 
 </body>
 </html>

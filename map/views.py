@@ -91,42 +91,48 @@ def get_list_areas(request):
 
 def contact(request):
     params = []
-    if request.method == 'POST':  # S'il s'agit d'une requête POST
-        form = InputForm(request.POST)  # Nous reprenons les données
+    # sélections des zones
+    areas = Area.objects.all().values_list('zone', 'min_lat', 'max_lat', 'min_lon', 'max_lon')
 
-        if form.is_valid():  # Nous vérifions que les données envoyées sont valides
+    array2d=np.asarray(list(areas))
+
+    list_area = json.dumps(array2d.tolist())
+
+    areasId = Area.objects.all().values_list('zone', flat=True)
+    list_areasId = [entry for entry in areasId]
+
+    if request.method == 'POST':
+        # S'il s'agit d'une requête POST
+        form = InputForm(request.POST)
+        # Nous reprenons les données
+
+        if form.is_valid():
+            # Nous vérifions que les données envoyées sont valides
             # Ici nous pouvons traiter les données du formulaire
             boatType = form.cleaned_data['boatType']
             month = form.cleaned_data['month']
             fortnight = form.cleaned_data['fortnight']
             activity = form.cleaned_data['activity']
 
-            # Nous pourrions ici envoyer l'e-mail grâce aux données que nous venons de récupérer
-
             envoi = True
-
             params = [boatType, month, fortnight, activity]
+            dfTest=get_datas(list_areasId, params)
+            predict,probabilities=getTabPrediction(dfTest)
+
+            p = np.column_stack( [ array2d , probabilities ] )
+            list_area = json.dumps(p.tolist())
 
         else:
             print("pas valide mais ok")
 
-    else:  # Si ce n'est pas du POST, c'est probablement une requête GET
-        form = InputForm()  # Nous créons un formulaire vide
+    else:
+        # Si ce n'est pas du POST, c'est probablement une requête GET
+        form = InputForm()
+        # Nous créons un formulaire vide
 
     date = datetime.now()
-
-    areas = Area.objects.all().values_list('zone', 'min_lat', 'max_lat', 'min_lon',
-                                           'max_lon')  # Nous sélectionnons toutes nos zones
-
-
-    list_area = unicode(json.dumps(list(areas)))
-
-    areasId = Area.objects.all().values_list('zone', flat=True)
-    list_areasId = [entry for entry in areasId]
-
-    dfTest=get_datas(list_areasId, params)
-
-    predict,probabilities=getTabPrediction(dfTest)
+    print type(list_area)
+    print list_area
 
     return render(request, 'index.html', locals())
 
@@ -186,7 +192,9 @@ def getTabPrediction(dfTest):
 
     predictions,probabilities=getPrediction(dfAreaHand,dfTest,features,target)
     print predictions
+    print type(predictions)
     print probabilities
+    print type(probabilities)
 
     return predictions,probabilities
 

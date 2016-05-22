@@ -1,13 +1,39 @@
-div.col-md-7{
-    margin-top : 10px;
+/* conf pour les cartes */
+.leaflet-container {
+    width: 700px;
+    height: 400px;
 }
 
-label{
-    display : block;
+#specialbigmap {
+    height: 800px;
+}
+
+/* section bootstrap contenant la carte */
+div.col-md-7 {
+    margin-top: 10px;
+}
+
+/* formulaire */
+form {
+    margin-top: 10px;
+}
+
+/* alignement des champs du formulaire */
+label {
+    display: block;
     width: 150px;
-    float : left;
+    float: left;
 }
 
-form{
-    margin-top : 10px;
+#img-spinner {
+    /*position: fixed;
+    top: 50%;
+    lefy : 50%;
+    margin-left:-50px;
+    margin-top: -50px;
+    text-align: center;
+    z-index : 1234;
+    overflow: auto;*/
+    width: 400px;
+    height: 400px;
 }
