@@ -62,17 +62,19 @@ def getPrediction(dfTrain,dfTest,features,target,nb_esti=250,nb_features=1):
 
 
 def date_actuelle(request):
-    areas = Area.objects.all()  # Nous sélectionnons toutes nos zones
+    # méthode de debug
+    areas = Area.objects.all()
     return render(request, 'index.html', {'date': datetime.now(), 'list_area': areas})
 
 
 def get_list_areas(request):
+    # fonction d'exemple, à supprimer à terme
     # if request.method == 'POST':
     post_text = request.GET.get('email')
     print post_text
     response_data = {}
 
-    areas = Area.objects.all().values_list('zone', 'min_lat')  # Nous sélectionnons toutes nos zones
+    areas = Area.objects.all().values_list('zone', 'min_lat')
 
     response_data['listReturn'] = areas
 

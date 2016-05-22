@@ -1,4 +1,4 @@
-/* conf pour les cartes */
+/* configuation des les cartes */
 .leaflet-container {
     width: 700px;
     height: 400px;
@@ -25,15 +25,8 @@ label {
     float: left;
 }
 
-#img-spinner {
-    /*position: fixed;
-    top: 50%;
-    lefy : 50%;
-    margin-left:-50px;
-    margin-top: -50px;
-    text-align: center;
-    z-index : 1234;
-    overflow: auto;*/
-    width: 400px;
-    height: 400px;
+/* positionnement de la barre de chargement */
+.spinner {
+    margin-top: 20px;
+    margin-left: 30%;
 }

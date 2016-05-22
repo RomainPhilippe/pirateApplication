@@ -171,20 +171,21 @@
                 {#% endfor %#}
                 --->
 
-
+            <!-- formulaire -->
             <form action="{% url "map.views.contact" %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <input type="submit" value="Afficher la carte" onclick="on_click()"/>
             </form>
 
+            <!-- barre de chargement -->
             <div id="spinner" class="spinner" style="display:none;">
-                    <img id="img-spinner" src="{% static 'img/ajax-loader.gif' %}" alt="Loading"/>
+                    <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
             </div>
-            <!--<button onclick="sendParameters()">Click me</button>-->
         </div>
 
 
+        <!-- carte -->
         <div class="col-md-7">
             {% if envoi %}
                 {% leaflet_map "map" callback="window.map_with_probabilities" %}
