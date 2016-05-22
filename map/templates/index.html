@@ -27,7 +27,7 @@
 <script type="text/javascript">
 
     function map_init_basic(map, options) {
-        //création de la carte initiale à l'ouverture de la page
+        //creation of the initial map at opening
         var list = "{{ list_area }}";
         list = list.replace(/&quot;/g, "'");
 
@@ -57,7 +57,7 @@
     }
 
     function map_with_probabilities(map, options) {
-        //configuration de la carte après l'appel de l'algo de ML
+        //configuration of the map after ML algo is applied
         var list = "{{ list_area }}";
         list = list.replace(/&quot;/g, "'");
 
@@ -86,39 +86,39 @@
     }
 
     function get_color(proba, options) {
-        //récupération de la couleur de la zone en fonction de la probabilité d'attaque
+        //color according to the probability of attack
         if (proba == 0) {
-            //gris
+            //grey
             return 'grey'
         } else if (proba < 0.1) {
-            //bleu foncé
-            return '#4105b4';
+            //dark blue
+            return '#00f';
         } else if (proba < 0.2) {
-            //bleu
+            //blue
             return '#048cfc';
         } else if (proba < 0.3) {
-            //bleu clair
+            //light blue
             return '#44f4fc';
         } else if (proba < 0.4) {
-            //vert
+            //green
             return '#a0fe44';
         } else if (proba < 0.5) {
-            //vert clair
+            //light green
             return '#44fe64';
         } else if (proba < 0.6) {
-            //jaune
+            //yellow
             return '#fbf63c';
         } else if (proba < 0.7) {
-            //jaune orangé
+            //yellow orange
             return '#ff9900';
         } else if (proba < 0.8) {
             //orange
             return '#fca044';
         } else if (proba < 0.9) {
-            //rouge
+            //red
             return '#fb4444';
         } else {
-            //rouge foncé
+            //dark red
             return '#fb1e1e';
         }
 
@@ -171,28 +171,26 @@
                 {#% endfor %#}
                 --->
 
-            <!-- formulaire -->
-            <form action="{% url "map.views.contact" %}" method="post">
+            <!-- form -->
+            <form action="{% url "map.views.result" %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <input type="submit" value="Afficher la carte" onclick="on_click()"/>
             </form>
 
-            <!-- barre de chargement -->
+            <!-- loading state -->
             <div id="spinner" class="spinner" style="display:none;">
                     <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
             </div>
         </div>
 
-
-        <!-- carte -->
+        <!-- map -->
         <div class="col-md-7">
-            {% if envoi %}
+            {% if isFormSent %}
                 {% leaflet_map "map" callback="window.map_with_probabilities" %}
             {% else %}
                 {% leaflet_map "map" callback="window.map_init_basic" %}
             {% endif %}
-
 
         </div>
     </div>

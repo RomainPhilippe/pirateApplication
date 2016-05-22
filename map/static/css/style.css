@@ -1,4 +1,4 @@
-/* configuation des les cartes */
+/* map configuration */
 .leaflet-container {
     width: 700px;
     height: 400px;
@@ -8,24 +8,24 @@
     height: 800px;
 }
 
-/* section bootstrap contenant la carte */
+/* bootstrap column containing the map */
 div.col-md-7 {
     margin-top: 10px;
 }
 
-/* formulaire */
+/* form */
 form {
     margin-top: 10px;
 }
 
-/* alignement des champs du formulaire */
+/* form align */
 label {
     display: block;
     width: 150px;
     float: left;
 }
 
-/* positionnement de la barre de chargement */
+/* loading indicator */
 .spinner {
     margin-top: 20px;
     margin-left: 30%;
