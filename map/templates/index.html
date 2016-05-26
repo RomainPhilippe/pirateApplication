@@ -59,6 +59,11 @@
     function map_with_probabilities(map, options) {
         //configuration of the map after ML algo is applied
         var list = "{{ list_area }}";
+
+        var probaAttaque = document.getElementById("probaAttaque");
+        probaNonAttaque = 1;
+        probaAttaque = 0;
+
         list = list.replace(/&quot;/g, "'");
 
         var listAreas = eval(list);
@@ -82,7 +87,10 @@
             }).addTo(map);
 
             polygon.bindPopup("P = " + parseFloat(area[5]));
+            probaNonAttaque = probaNonAttaque*(1-parseFloat(area[5]));
         }
+        $('#probaNonAttaque').replaceWith(probaNonAttaque);
+        $('#probaAttaque').replaceWith(1-probaNonAttaque);
     }
 
     function get_color(proba, options) {
@@ -157,6 +165,8 @@
     <div class="row">
 
         <div class="col-md-5">
+
+            <div class="row">
             <h1>Pirate attacks prediction</h1>
             <p>La date actuelle est : {{ date }}</p>
 
@@ -182,6 +192,15 @@
             <div id="spinner" class="spinner" style="display:none;">
                     <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
             </div>
+                </div>
+
+            <div class="row">
+                <p >La probabilité de ne pas se faire attaquer dans la zone est de : <span id="probaNonAttaque"></span></p>
+                </div>
+            <div class="row">
+                <p >La probabilité de se faire attaquer dans la zone est de : <span id="probaAttaque"></span></p>
+            </div>
+
         </div>
 
         <!-- map -->
