@@ -61,10 +61,10 @@ def getPrediction(dfTrain, dfTest, features, target, nb_esti=250, nb_features=1)
 #############################################################################
 
 
-def date_actuelle(request):
-    # méthode de debug
-    areas = Area.objects.all()
-    return render(request, 'index.html', {'date': datetime.now(), 'list_area': areas})
+def getCluster(request):
+
+    return render(request, 'cluster.html', locals())
+
 
 
 def get_list_areas(request):
@@ -82,13 +82,7 @@ def get_list_areas(request):
             json.dumps(list(areas), cls=DjangoJSONEncoder),
             content_type="application/json")
 
-    # else:
-    #    return HttpResponse(
-    #        json.dumps({"nothing to see": "this isn't happening"}),
-    #        content_type="application/json"
-    #   )
 
-    # return render(request, 'index.html', {'date': datetime.now(), 'list_area': areas})
 
 
 def result(request):
