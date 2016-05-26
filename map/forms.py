@@ -33,17 +33,17 @@ class InputForm(forms.Form):
 
 class InputFormCluster(forms.Form):
     # creation of the boat type list according to the values contained in the BDD
-    #dbTypes = AreaHand.objects.all().values_list('boatType', flat=True)
-    #list_dbTypes = [entry for entry in dbTypes]
-    #dicBoat = {'Boats': list_dbTypes}
-    #dfArea = pd.DataFrame(dicBoat)
-    #dfArea = dfArea['Boats'].unique()
-    #listTuples = []
-    #for i in range(0, len(dfArea)):
-    #    listTuples.append(tuple([dfArea[i], dfArea[i]]))
+    dbTypes = AreaHand.objects.all().values_list('boatType', flat=True)
+    list_dbTypes = [entry for entry in dbTypes]
+    dicBoat = {'Boats': list_dbTypes}
+    dfArea = pd.DataFrame(dicBoat)
+    dfArea = dfArea['Boats'].unique()
+    listTuples = []
+    for i in range(0, len(dfArea)):
+        listTuples.append(tuple([dfArea[i], dfArea[i]]))
 
     # boat types
-    #boatType = forms.ChoiceField(label='Type de bateau', choices=listTuples)
+    boatType = forms.ChoiceField(label='Type de bateau', choices=listTuples)
     # TODO dynamique month Years
     # month
     CHOICES = (
