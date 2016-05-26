@@ -12,7 +12,7 @@ from map.models import Area, AreaHand, ClusterAden
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
-from map.forms import InputForm,InputFormCluster
+from map.forms import InputForm, InputFormCluster
 
 
 #############################################################################
@@ -65,26 +65,23 @@ def getCluster(request):
         if form.is_valid():
             # data processing
             month = form.cleaned_data['month']
-            years = form.cleaned_data['years']
-            clusters = ClusterAden.objects.all().values_list('barLong', 'barLat', 'rayon', 'weight', 'nbDays','month','year','ref')
-            dfClusters = pd.DataFrame(list(ClusterAden.objects.all().values()))
+            year = form.cleaned_data['years']
 
-            filteredClusters = []
-            for i in range(0,len(clusters)):
-                print clusters[0][0]
-                if(clusters[5][i] == month):
-                    filteredClusters.append(clusters[i])
+            dfClusters = pd.DataFrame(list(ClusterAden.objects.all().values('barLong','barLat','rayon','weight','nbDays','month','year','ref')))
 
-            # isFormSent : permits to acces the state from clusters.html
-            isFormSent = True
-            array2d = np.asarray(list(filteredClusters))
-            list_clusters = json.dumps(array2d.tolist())
+            month = int(month)
+            year = int(year)
+            dfFilter = dfClusters[(dfClusters['month'].astype(int) == month) & (dfClusters['year'].astype(int) == year)]
+            if(len(dfFilter)>0):
+                print dfFilter
+                isFormSent = True
+                list_clusters = json.dumps(dfFilter.as_matrix().tolist())
+
     else:
         # empty form
         form = InputFormCluster()
 
     return render(request, 'cluster.html', locals())
-
 
 
 def get_list_areas(request):
@@ -101,8 +98,6 @@ def get_list_areas(request):
     return HttpResponse(
             json.dumps(list(areas), cls=DjangoJSONEncoder),
             content_type="application/json")
-
-
 
 
 def result(request):

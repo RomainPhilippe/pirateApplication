@@ -30,39 +30,79 @@
 
     }
 
-    function map_with_form(map, options) {
-        //configuration of the map after ML algo is applied
+    function map_with_clusters(map, options) {
+        //configuration of the map when the clusters are added
 
-        L.circle([17.5, 40.5], 30000).addTo(map);
-
-        /*
-        var list = "{{ list_area }}";
+        var list = "{{ list_clusters }}";
         list = list.replace(/&quot;/g, "'");
 
-        var listAreas = eval(list);
-        console.log(listAreas)
+        var listClusters = eval(list);
+        console.log("map with clusters : ")
+        console.log(listClusters)
 
-        for (var i = 0; i < listAreas.length; i++) {
-            var area = listAreas[i];
-            colorArea = get_color(parseFloat(area[5]));
+        for (var i = 0; i < listClusters.length; i++) {
+            var cluster = listClusters[i];
+
+            colorCluster = get_color(parseFloat(cluster[6]));
             var num = i;
             var n = num.toString();
+            rayon = parseFloat(cluster[4]);
+            if(rayon <= 0){
+                rayon = 1;
+            }
 
-            var polygon = L.polygon([
-                [parseFloat(area[1]), parseFloat(area[3])],
-                [parseFloat(area[1]), parseFloat(area[4])],
-                [parseFloat(area[2]), parseFloat(area[4])],
-                [parseFloat(area[2]), parseFloat(area[3])]
-            ], {
-                color: colorArea,
+            var polygon = L.circle([parseFloat(cluster[0]), parseFloat(cluster[1])],
+                    rayon*1000, {
+                color: colorCluster,
                 fillOpacity: 0.3, //default = 0.5
                 weight: 3 //default = 5px
             }).addTo(map);
 
-            polygon.bindPopup("P = " + parseFloat(area[5]));
+            nbDays = parseFloat(cluster[3]);
+            if(nbDays <= 0){
+                nbDays = 1;
+            }
+            polygon.bindPopup("Nombre de jours = " + nbDays);
         }
+    }
 
-        */
+
+    function get_opacity(weight, options) {
+        //color according to the probability of attack
+        if (weight == 0) {
+            //grey
+            return 'grey'
+        } else if (weight < 2) {
+            //dark blue
+            return '#00f';
+        } else if (weight < 7) {
+            //blue
+            return '#048cfc';
+        } else if (weight < 12) {
+            //light blue
+            return '#44f4fc';
+        } else if (weight < 15) {
+            //green
+            return '#a0fe44';
+        } else if (weight < 17) {
+            //light green
+            return '#44fe64';
+        } else if (weight < 20) {
+            //yellow
+            return '#fbf63c';
+        } else if (weight < 25) {
+            //yellow orange
+            return '#ff9900';
+        } else if (weight < 27) {
+            //orange
+            return '#fca044';
+        } else if (weight < 30) {
+            //red
+            return '#fb4444';
+        } else {
+            //dark red
+            return '#fb1e1e';
+        }
 
     }
 
@@ -96,7 +136,7 @@
         <!-- map -->
         <div class="col-md-7">
             {% if isFormSent %}
-                {% leaflet_map "map" callback="window.map_with_form" %}
+                {% leaflet_map "map" callback="window.map_with_clusters" %}
             {% else %}
                 {% leaflet_map "map" callback="window.map_init_basic" %}
             {% endif %}
