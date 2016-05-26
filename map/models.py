@@ -14,7 +14,6 @@ class Area(models.Model):
     def __str__(self):
         return self.zone
 
-
 class AreaHand(models.Model):
     # TODO : recharger la base via le csv avant de rendre le projet
     area = models.CharField(max_length=3)

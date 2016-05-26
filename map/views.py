@@ -8,7 +8,9 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
-from map.models import Area, AreaHand, ClusterAden
+from map.models import Area
+from map.models import AreaHand
+from map.models import ClusterAden
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
