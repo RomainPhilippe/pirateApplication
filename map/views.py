@@ -8,8 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
-from map.models import Area
-from map.models import AreaHand
+from map.models import Area, AreaHand, ClusterAden
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
@@ -57,8 +56,7 @@ def getPrediction(dfTrain, dfTest, features, target, nb_esti=250, nb_features=1)
 
 
 def getCluster(request):
-    # principal function
-    # retrieval of the infos from the form and apply the ML algo
+    # retrieval of the clusters from the selected month & years
 
     if request.method == 'POST':
         # retrieval of the datas from the entry form
@@ -68,8 +66,19 @@ def getCluster(request):
             # data processing
             month = form.cleaned_data['month']
             years = form.cleaned_data['years']
-            # isFormSent : permits to acces the state from index.html
+            clusters = ClusterAden.objects.all().values_list('barLong', 'barLat', 'rayon', 'weight', 'nbDays','month','year','ref')
+            dfClusters = pd.DataFrame(list(ClusterAden.objects.all().values()))
+
+            filteredClusters = []
+            for i in range(0,len(clusters)):
+                print clusters[0][0]
+                if(clusters[5][i] == month):
+                    filteredClusters.append(clusters[i])
+
+            # isFormSent : permits to acces the state from clusters.html
             isFormSent = True
+            array2d = np.asarray(list(filteredClusters))
+            list_clusters = json.dumps(array2d.tolist())
     else:
         # empty form
         form = InputFormCluster()
