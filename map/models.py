@@ -27,3 +27,16 @@ class AreaHand(models.Model):
 
     def __str__(self):
         return self.zone
+
+class ClusterAden(models.Model):
+    barLong = models.FloatField()
+    barLat = models.FloatField()
+    rayon = models.FloatField()
+    weight = models.FloatField()
+    nbDays = models.FloatField()
+    month = models.FloatField()
+    year = models.FloatField()
+    ref = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.zone
