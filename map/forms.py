@@ -44,7 +44,7 @@ class InputFormCluster(forms.Form):
 
     # boat types
     #boatType = forms.ChoiceField(label='Type de bateau', choices=listTuples)
-
+    # TODO dynamique month Years
     # month
     CHOICES = (
         ('1', 'Janvier'), ('2', 'Février'), ('3', 'Mars'), ('4', 'Avril'), ('5', 'Mai'), ('6', 'Juin'), ('7', 'Juillet'),

@@ -13,12 +13,7 @@ from map.models import AreaHand
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 
-from map.forms import InputForm
-
-
-def index(request):
-    print "index"
-    return HttpResponse("Hello, world. You're at the polls index.")
+from map.forms import InputForm,InputFormCluster
 
 
 #############################################################################
@@ -62,6 +57,22 @@ def getPrediction(dfTrain, dfTest, features, target, nb_esti=250, nb_features=1)
 
 
 def getCluster(request):
+    # principal function
+    # retrieval of the infos from the form and apply the ML algo
+
+    if request.method == 'POST':
+        # retrieval of the datas from the entry form
+        form = InputFormCluster(request.POST)
+
+        if form.is_valid():
+            # data processing
+            month = form.cleaned_data['month']
+            years = form.cleaned_data['years']
+            # isFormSent : permits to acces the state from index.html
+            isFormSent = True
+    else:
+        # empty form
+        form = InputFormCluster()
 
     return render(request, 'cluster.html', locals())
 

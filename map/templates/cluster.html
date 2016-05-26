@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Pirate Attack Prediction</title>
+    <title>Clustering</title>
 
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"/>
@@ -32,6 +32,10 @@
 
     function map_with_form(map, options) {
         //configuration of the map after ML algo is applied
+
+        L.circle([17.5, 40.5], 30000).addTo(map);
+
+        /*
         var list = "{{ list_area }}";
         list = list.replace(/&quot;/g, "'");
 
@@ -57,6 +61,9 @@
 
             polygon.bindPopup("P = " + parseFloat(area[5]));
         }
+
+        */
+
     }
 
     function on_click() {
@@ -71,13 +78,13 @@
     <div class="row">
 
         <div class="col-md-5">
-            <h1>Pirate attacks prediction</h1>
+            <h1>Clustering</h1>
 
             <!-- form -->
-            <form action="{% url "map.views.result" %}" method="post">
+            <form action="{% url "map.views.getCluster" %}" method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="submit" value="Afficher la carte" onclick="on_click()"/>
+                <input type="submit" value="Afficher les clusters" onclick="on_click()"/>
             </form>
 
             <!-- loading state -->
@@ -89,7 +96,7 @@
         <!-- map -->
         <div class="col-md-7">
             {% if isFormSent %}
-                {% leaflet_map "map" callback="window.map_with_probabilities" %}
+                {% leaflet_map "map" callback="window.map_with_form" %}
             {% else %}
                 {% leaflet_map "map" callback="window.map_init_basic" %}
             {% endif %}
