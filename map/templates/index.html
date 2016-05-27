@@ -86,7 +86,7 @@
                 weight: 3 //default = 5px
             }).addTo(map);
 
-            polygon.bindPopup("P = " + parseFloat(area[5]));
+            polygon.bindPopup("Zone : "+area[0]+" ---- Prob = " + parseFloat(area[5]));
             probaNonAttaque = probaNonAttaque*(1-parseFloat(area[5]));
         }
         $('#probaNonAttaque').replaceWith(probaNonAttaque);
@@ -169,17 +169,6 @@
             <div class="row">
             <h1>Pirate attacks prediction</h1>
             <p>La date actuelle est : {{ date }}</p>
-
-            <!---
-                La liste des zones :
-                {#% for area in list_area %#}
-                    <div class="article">
-                        <h3>{#  #}{ area.zone }}</h3>
-                    </div>
-                {#% empty %#}
-                    <p>Aucun article.</p>
-                {#% endfor %#}
-                --->
 
             <!-- form -->
             <form action="{% url "map.views.result" %}" method="post">

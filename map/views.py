@@ -132,6 +132,8 @@ def result(request):
             # dataframe building for the ML algo
             params = [boatType, month, fortnight, activity]
             dfTest = get_datas(list_areasId, params)
+            print "dfTest 1 : "
+            print dfTest
 
             # ML alog
             predict, probabilities = getTabPrediction(dfTest)
@@ -191,13 +193,16 @@ def getTabPrediction(dfTest):
     features = np.concatenate([features, featureBinary]).tolist()
     target = 'attack'
 
+
+    print "----------------------------------"
+    print " features : "
     print features
 
-    print "Train dataset : "
-    print dfAreaHand.head()
 
-    print "dfTest : "
-    print dfTest.head()
+    print "----------------------------------"
+    print "Train dataset : "
+    print dfAreaHand.ix[0:2,0:30]
+
 
     predictions, probabilities = getPrediction(dfAreaHand, dfTest, features, target)
     print predictions
