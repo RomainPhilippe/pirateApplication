@@ -57,6 +57,11 @@ def getPrediction(dfTrain, dfTest, features, target, nb_esti=250, nb_features=1)
 #############################################################################
 
 
+def home(request):
+    return render(request, 'home.html', locals())
+
+
+
 def getCluster(request):
     # retrieval of the clusters from the selected month & years
 
@@ -87,6 +92,7 @@ def getCluster(request):
 
 
 def get_list_areas(request):
+    # TODO a supprimer
     # fonction d'exemple, à supprimer à terme
     # if request.method == 'POST':
     post_text = request.GET.get('email')
@@ -96,7 +102,6 @@ def get_list_areas(request):
     areas = Area.objects.all().values_list('zone', 'min_lat')
 
     response_data['listReturn'] = areas
-
     return HttpResponse(
             json.dumps(list(areas), cls=DjangoJSONEncoder),
             content_type="application/json")
@@ -176,6 +181,8 @@ def get_datas(list_areasId, params):
     return dfTest
 
 
+
+# return probabilities and predictions
 def getTabPrediction(dfTest):
     # we get train dataframe from database
     dfAreaHand = pd.DataFrame(list(AreaHand.objects.all().values()))
@@ -194,20 +201,20 @@ def getTabPrediction(dfTest):
     target = 'attack'
 
 
-    print "----------------------------------"
-    print " features : "
-    print features
+    #print "----------------------------------"
+    #print " features : "
+    #print features
 
 
-    print "----------------------------------"
-    print "Train dataset : "
-    print dfAreaHand.ix[0:2,0:30]
+    #print "----------------------------------"
+    #print "Train dataset : "
+    #print dfAreaHand.ix[0:2,0:30]
 
 
     predictions, probabilities = getPrediction(dfAreaHand, dfTest, features, target)
-    print predictions
-    print type(predictions)
-    print probabilities
-    print type(probabilities)
+    #print predictions
+    #print type(predictions)
+    #print probabilities
+    #print type(probabilities)
 
     return predictions, probabilities

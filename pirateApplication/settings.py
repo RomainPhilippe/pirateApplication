@@ -129,8 +129,8 @@ STATIC_URL = '/static/'
 
 LEAFLET_CONFIG = {
     # conf here
-    'DEFAULT_CENTER': (10.0, 45.0),
-    'DEFAULT_ZOOM': 5,
+    'DEFAULT_CENTER': (8.0, 52.0),
+    'DEFAULT_ZOOM': 4,
     'TILES': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 }
 

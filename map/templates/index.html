@@ -160,49 +160,63 @@
 
 </script>
 
-<div class="container-fluid">
 
-    <div class="row">
 
-        <div class="col-md-5">
+
+
+    <div class="container-fluid">
+
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="home">Pirate attacks</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li><a href="cluster">Clustering</a></li>
+                        <li class="active"><a href="prediction">Prediction</a></li>
+                    </ul>
+                </div>
+            </nav>
+
 
             <div class="row">
-            <h1>Pirate attacks prediction</h1>
-            <p>La date actuelle est : {{ date }}</p>
 
-            <!-- form -->
-            <form action="{% url "map.views.result" %}" method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Afficher la carte" onclick="on_click()"/>
-            </form>
+                <div class="col-md-5">
 
-            <!-- loading state -->
-            <div id="spinner" class="spinner" style="display:none;">
-                    <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
-            </div>
+
+                        <h1>Prediction</h1>
+                        <p>La date actuelle est : {{ date }}</p>
+
+                        <!-- form -->
+                        <form action="{% url "map.views.result" %}" method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <input type="submit" value="Afficher la carte" onclick="on_click()"/>
+                        </form>
+
+                        <!-- loading state -->
+                        <div id="spinner" class="spinner" style="display:none;">
+                                <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
+                        </div>
+
+
+                        <p >La probabilité de ne pas se faire attaquer dans la zone est de : <span id="probaNonAttaque"></span></p>
+                        <p >La probabilité de se faire attaquer dans la zone est de : <span id="probaAttaque"></span></p>
+
+
                 </div>
 
-            <div class="row">
-                <p >La probabilité de ne pas se faire attaquer dans la zone est de : <span id="probaNonAttaque"></span></p>
+                <!-- map -->
+                <div class="col-md-7">
+                    {% if isFormSent %}
+                        {% leaflet_map "map" callback="window.map_with_probabilities" %}
+                    {% else %}
+                        {% leaflet_map "map" callback="window.map_init_basic" %}
+                    {% endif %}
+
                 </div>
-            <div class="row">
-                <p >La probabilité de se faire attaquer dans la zone est de : <span id="probaAttaque"></span></p>
             </div>
-
-        </div>
-
-        <!-- map -->
-        <div class="col-md-7">
-            {% if isFormSent %}
-                {% leaflet_map "map" callback="window.map_with_probabilities" %}
-            {% else %}
-                {% leaflet_map "map" callback="window.map_init_basic" %}
-            {% endif %}
-
-        </div>
     </div>
-</div>
 
 </body>
 </html>
