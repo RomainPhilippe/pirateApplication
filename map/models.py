@@ -10,6 +10,7 @@ class Area(models.Model):
     max_lat = models.FloatField()
     min_lon = models.FloatField()
     max_lon = models.FloatField()
+    globalZone = models.FloatField()
 
     def __str__(self):
         return self.zone

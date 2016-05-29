@@ -32,11 +32,12 @@
         list = list.replace(/&quot;/g, "'");
 
         var listAreas = eval(list);
-        console.log("listAreas")
-        console.log(listAreas)
+        console.log("listAreas");
+        console.log(listAreas);
 
         for (var i = 0; i < listAreas.length; i++) {
             var area = listAreas[i];
+
             var num = i;
             var n = num.toString();
 
@@ -52,17 +53,41 @@
             }).addTo(map);
 
             polygon.bindPopup("Zone " + area[0]);
-
         }
+
+        legend(map);
+    }
+
+    function legend(map){
+        var legend = L.control({position: 'bottomleft'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+                    grades = ['A', 'G', 'I'],
+                    labels = [];
+
+            // loop through our density intervals and generate a label with a colored square for each interval
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                        '<i style="border: 2px darkgray ' + getLine(grades[i])+ '"></i> ' +'zone: ' + grades[i]+ '<br>' ;
+            }
+
+            return div;
+        };
+        legend.addTo(map);
+    }
+
+    function getLine(zone){
+        return zone=='I' ? 'dashed':
+                zone == 'A'? 'dotted':
+                        'solid';
+
     }
 
     function map_with_probabilities(map, options) {
         //configuration of the map after ML algo is applied
         var list = "{{ list_area }}";
-
-        var probaAttaque = document.getElementById("probaAttaque");
-        probaNonAttaque = 1;
-        probaAttaque = 0;
+        var probaNonAttaque = 1;
+        var probaAttaque = 0;
 
         list = list.replace(/&quot;/g, "'");
 
@@ -71,7 +96,9 @@
 
         for (var i = 0; i < listAreas.length; i++) {
             var area = listAreas[i];
-            colorArea = get_color(parseFloat(area[5]));
+
+            dash = getDash(area[5]);
+            colorArea = get_color(parseFloat(area[6]));
             var num = i;
             var n = num.toString();
 
@@ -83,14 +110,28 @@
             ], {
                 color: colorArea,
                 fillOpacity: 0.3, //default = 0.5
-                weight: 3 //default = 5px
+                weight: 3, //default = 5px
+                dashArray: dash
             }).addTo(map);
 
-            polygon.bindPopup("Zone : "+area[0]+" ---- Prob = " + parseFloat(area[5]));
-            probaNonAttaque = probaNonAttaque*(1-parseFloat(area[5]));
+            polygon.bindPopup("Zone : "+area[0]+" ---- Prob = " + parseFloat(area[6]));
+            probaNonAttaque = probaNonAttaque*(1-parseFloat(area[6]));
         }
-        $('#probaNonAttaque').replaceWith(probaNonAttaque);
-        $('#probaAttaque').replaceWith(1-probaNonAttaque);
+
+        legend(map);
+
+        probaAttaque = 1-probaNonAttaque;
+        $('#probaNonAttaque').replaceWith("La probabilité de ne pas se faire attaquer dans la zone est de :" + probaNonAttaque);
+        $('#probaAttaque').replaceWith("La probabilité de se faire attaquer dans la zone est de :" + probaAttaque);
+    }
+
+    function getDash(zone){
+        if(zone=='A')
+            return "1, 5";
+        else if (zone == 'I')
+            return "5, 10";
+        else
+            return null;
     }
 
     function get_color(proba, options) {
@@ -200,8 +241,8 @@
                         </div>
 
 
-                        <p >La probabilité de ne pas se faire attaquer dans la zone est de : <span id="probaNonAttaque"></span></p>
-                        <p >La probabilité de se faire attaquer dans la zone est de : <span id="probaAttaque"></span></p>
+                        <p > <span id="probaNonAttaque"></span></p>
+                        <p > <span id="probaAttaque"></span></p>
 
 
                 </div>

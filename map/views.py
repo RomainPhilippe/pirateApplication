@@ -114,7 +114,7 @@ def result(request):
     # retrieval of the infos from the form and apply the ML algo
 
     # retrieval of the zones from the data base and creation of a json
-    areas = Area.objects.all().values_list('zone', 'min_lat', 'max_lat', 'min_lon', 'max_lon')
+    areas = Area.objects.all().values_list('zone', 'min_lat', 'max_lat', 'min_lon', 'max_lon', 'globalZone')
     array2d = np.asarray(list(areas))
     list_area = json.dumps(array2d.tolist())
 

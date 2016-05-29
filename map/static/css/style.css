@@ -30,3 +30,17 @@ label {
     margin-top: 20px;
     margin-left: 30%;
 }
+
+.legend {
+    color: #555;
+    font-size: 14px;
+    background-color: white;
+    line-height: 50px;
+}
+.legend i {
+    width: 40px;
+    height: 40px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
