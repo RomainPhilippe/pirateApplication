@@ -203,20 +203,6 @@ def getTabPrediction(dfTest):
     target = 'attack'
 
 
-    #print "----------------------------------"
-    #print " features : "
-    #print features
-
-
-    #print "----------------------------------"
-    #print "Train dataset : "
-    #print dfAreaHand.ix[0:2,0:30]
-
-
     predictions, probabilities = getPrediction(dfAreaHand, dfTest, features, target)
-    #print predictions
-    #print type(predictions)
-    #print probabilities
-    #print type(probabilities)
 
     return predictions, probabilities
