@@ -173,26 +173,6 @@
 
     }
 
-    function sendParameters() {
-        // todo : à supprimer à terme
-        var email = $("#id_envoyeur").val();
-        alert(email);
-        $.ajax({
-            url: "list_area", // the endpoint
-            type: "GET", // http method
-            data: {'email': 'romain.philippe78@free.fr'},
-            // handle a successful response
-            success: function (json) {
-                console.log(json); // log the returned json to the console
-            },
-            // handle a non-successful response
-            error: function (xhr, errmsg, err) {
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: " + errmsg +
-                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            }
-        });
-    }
 
     function on_click() {
         //indicateur de chargement
@@ -229,7 +209,7 @@
                         <p>La date actuelle est : {{ date }}</p>
 
                         <!-- form -->
-                        <form action="{% url "map.views.result" %}" method="post">
+                        <form action="{% url "map.views.resultPrediction" %}" method="post">
                             {% csrf_token %}
                             {{ form.as_p }}
                             <input type="submit" value="Afficher la carte" onclick="on_click()"/>

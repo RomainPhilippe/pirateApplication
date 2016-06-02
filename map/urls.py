@@ -4,9 +4,6 @@ from . import views
 
 urlpatterns = [
     url(r'^home$', views.home, name='home'),
-    url(r'^prediction$', views.result, name='date'),
+    url(r'^prediction$', views.resultPrediction, name='date'),
     url(r'^cluster$', views.getCluster, name='cluster'),
-    url(r'^list_area$', views.get_list_areas, name='areas'),
-    url(r'^result/$', views.result),
-
 ]

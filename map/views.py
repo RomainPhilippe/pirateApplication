@@ -93,23 +93,7 @@ def getCluster(request):
     return render(request, 'cluster.html', locals())
 
 
-def get_list_areas(request):
-    # TODO a supprimer
-    # fonction d'exemple, à supprimer à terme
-    # if request.method == 'POST':
-    post_text = request.GET.get('email')
-    print post_text
-    response_data = {}
-
-    areas = Area.objects.all().values_list('zone', 'min_lat')
-
-    response_data['listReturn'] = areas
-    return HttpResponse(
-            json.dumps(list(areas), cls=DjangoJSONEncoder),
-            content_type="application/json")
-
-
-def result(request):
+def resultPrediction(request):
     # principal function
     # retrieval of the infos from the form and apply the ML algo
 
@@ -133,7 +117,7 @@ def result(request):
             fortnight = form.cleaned_data['fortnight']
             activity = form.cleaned_data['activity']
 
-            # isFormSent : permits to acces the state from index.html
+            # isFormSent : permits to acces the state from prediction.html
             isFormSent = True
 
             # dataframe building for the ML algo
@@ -145,7 +129,7 @@ def result(request):
             # ML alog
             predict, probabilities = getTabPrediction(dfTest)
 
-            # sending of probabilities to index.html
+            # sending of probabilities to prediction.html
             p = np.column_stack([array2d, probabilities])
             list_area = json.dumps(p.tolist())
 
@@ -155,7 +139,7 @@ def result(request):
 
     date = datetime.now()
 
-    return render(request, 'index.html', locals())
+    return render(request, 'prediction.html', locals())
 
 
 def get_datas(list_areasId, params):
