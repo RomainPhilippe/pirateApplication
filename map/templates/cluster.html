@@ -47,35 +47,45 @@
             var num = i;
             var n = num.toString();
             rayon = parseFloat(cluster[4]);
-            if(rayon <= 0){
-                rayon = 1;
+            if (rayon <= 0) {
+                rayon = 2;
             }
 
             var polygon = L.circle([parseFloat(cluster[0]), parseFloat(cluster[1])],
-                    rayon*1000, {
-                color: colorCluster,
-                fillOpacity: 0.3, //default = 0.5
-                weight: 3 //default = 5px
-            }).addTo(map);
+                    rayon * 1000, {
+                        color: colorCluster,
+                        fillOpacity: 0.3, //default = 0.5
+                        weight: 3, //default = 5px
+                        dashArray : getDash(cluster[5])
+                    }).addTo(map);
 
             nbDays = parseFloat(cluster[3]);
-            if(nbDays <= 0){
+            if (nbDays <= 0) {
                 nbDays = 1;
             }
-            polygon.bindPopup("Nombre de jours = " + nbDays);
+            polygon.bindPopup("Nb de jours = " + nbDays + " --- Poids = " + parseFloat(cluster[6]));
         }
     }
 
 
+    function getDash(zone) {
+        if (zone.indexOf('A') > -1)
+            return "1, 5";
+        else if (zone.indexOf('I') > -1)
+            return "5, 10";
+        else
+            return null;
+    }
+
     function get_color(weight, options) {
-        //color according to the probability of attack
+        //color according to number of attack included in the cluster
         if (weight == 0) {
             //grey
             return 'grey'
-        } else if (weight < 2) {
+        } else if (weight < 5) {
             //dark blue
             return '#00f';
-        } else if (weight < 7) {
+        } else if (weight < 10) {
             //blue
             return '#048cfc';
         } else if (weight < 12) {
@@ -144,6 +154,9 @@
             <div id="spinner" class="spinner" style="display:none;">
                     <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
             </div>
+            {% if isListEmpty %}
+                <div id="listEmpty"><p></p>Il n'y a pas d'attaque pour le mois renseigné</div>
+            {% endif %}
         </div>
 
         <!-- map -->
