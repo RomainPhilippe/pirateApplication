@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-
 class Area(models.Model):
     zone = models.CharField(max_length=3)
     min_lat = models.FloatField()
