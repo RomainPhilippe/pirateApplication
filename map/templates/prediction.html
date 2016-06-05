@@ -31,6 +31,8 @@
         var list = "{{ list_area }}";
         list = list.replace(/&quot;/g, "'");
 
+        legendColor();
+
         var listAreas = eval(list);
         console.log("listAreas");
         console.log(listAreas);
@@ -56,6 +58,21 @@
         }
 
         legend(map);
+        $("#tableProba").hide();
+    }
+
+    function legendColor(){
+
+        var arrayText = ['probabilité = 0', 'probabilité < 0.1', 'probabilité < 0.2', 'probabilité < 0.3', 'probabilité < 0.4',
+            'probabilité < 0.5', 'probabilité < 0.6', 'probabilité < 0.7', 'probabilité < 0.8', 'probabilité < 0.9', 'probabilité > ou = 0.9'];
+        var arrayColor = ['gray', '#00f', '#048cfc','#44f4fc','#a0fe44', '#44fe64','#fbf63c','#ff9900', '#fca044','#fb4444','#fb1e1e'];
+
+        var sLegend="";
+        for(var j=0; j<arrayText.length; j++){
+            sLegend = sLegend + "<tr><td style= 'background-color: " + arrayColor[j] + "'> </td><td>"+arrayText[j]+"</td></tr>";
+        }
+
+        $("#legendColor").replaceWith(sLegend);
     }
 
     function legend(map){
@@ -86,13 +103,17 @@
     function map_with_probabilities(map, options) {
         //configuration of the map after ML algo is applied
         var list = "{{ list_area }}";
-        var probaNonAttaque = 1;
-        var probaAttaque = 0;
+        var probaNonAttaqueA = 1;
+        var probaNonAttaqueG = 1;
+        var probaNonAttaqueI = 1;
+        var probaNonAttaqueGlobale = 1;
 
         list = list.replace(/&quot;/g, "'");
 
         var listAreas = eval(list);
         console.log(listAreas)
+
+        legendColor();
 
         for (var i = 0; i < listAreas.length; i++) {
             var area = listAreas[i];
@@ -115,14 +136,39 @@
             }).addTo(map);
 
             polygon.bindPopup("Zone : "+area[0]+" ---- Prob = " + parseFloat(area[6]));
-            probaNonAttaque = probaNonAttaque*(1-parseFloat(area[6]));
+
+            if(area[5]=='A')
+                probaNonAttaqueA = probaNonAttaqueA*((1e10-parseFloat(area[6])*1e10)/1e10);
+            else if(area[5]=='G')
+                probaNonAttaqueG = probaNonAttaqueG*((1e10-parseFloat(area[6])*1e10)/1e10);
+            else if(area[5]=='I'){
+                probaNonAttaqueI = probaNonAttaqueI*((1e10-parseFloat(area[6])*1e10)/1e10);
+            }
+            probaNonAttaqueGlobale = probaNonAttaqueGlobale*((1e10-parseFloat(area[6])*1e10)/1e10);
         }
 
         legend(map);
+        $("#tableProba").show();
 
-        probaAttaque = 1-probaNonAttaque;
-        $('#probaNonAttaque').replaceWith("La probabilité de ne pas se faire attaquer dans la zone est de :" + probaNonAttaque);
-        $('#probaAttaque').replaceWith("La probabilité de se faire attaquer dans la zone est de :" + probaAttaque);
+        probaAttaqueA = (1e10-probaNonAttaqueA*1e10)/1e10;
+        $("#probaNonAttaqueA").replaceWith(probaNonAttaqueA);
+        $("#probaAttaqueA").replaceWith(probaAttaqueA);
+
+
+        probaAttaqueG = (1e10-probaNonAttaqueG*1e10)/1e10;
+        $("#probaNonAttaqueG").replaceWith(probaNonAttaqueG);
+        $("#probaAttaqueG").replaceWith(probaAttaqueG);
+
+
+        probaAttaqueI = (1e10-probaNonAttaqueI*1e10)/1e10;
+        $("#probaNonAttaqueI").replaceWith(probaNonAttaqueI);
+        $("#probaAttaqueI").replaceWith(probaAttaqueI);
+
+        probaAttaqueGlobale = (1e10-probaNonAttaqueGlobale*1e10)/1e10;
+        $("#probaNonAttaqueGlobale").replaceWith(probaNonAttaqueGlobale);
+        $("#probaAttaqueGlobale").replaceWith(probaAttaqueGlobale);
+
+
     }
 
     function getDash(zone){
@@ -199,12 +245,8 @@
                 </div>
             </nav>
 
-
             <div class="row">
-
                 <div class="col-md-3">
-
-
                         <h1>Prediction</h1>
 
                         <!-- form -->
@@ -215,19 +257,14 @@
                         </form>
 
                         <!-- loading state -->
-                        <div id="spinner" class="spinner" style="display:none;">
-                                <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
-                        </div>
-
-
-                        <p > <span id="probaNonAttaque"></span></p>
-                        <p > <span id="probaAttaque"></span></p>
-
-
+                    <div id="spinner" class="spinner" style="display:none;">
+                        <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
+                    </div>
                 </div>
 
+
                 <!-- map -->
-                <div class="col-md-7">
+                <div class="col-md-5">
                     {% if isFormSent %}
                         {% leaflet_map "map" callback="window.map_with_probabilities" %}
                     {% else %}
@@ -235,6 +272,48 @@
                     {% endif %}
 
                 </div>
+
+                <!--legend-->
+                <div class="col-md-2">
+                    <table>
+                        <span  id="legendColor"></span>
+                    </table>
+                </div>
+
+            </div>
+        <div class="row">
+            <div class="col-md-9">
+                <table id="tableProba">
+                    <tr>
+                        <td colspan="2"></td>
+                        <th colspan="4" class="title">Zones: </th>
+                    </tr>
+
+                    <tr>
+                        <th rowspan="3" class="title">Probabilités: </th>
+                        <td></td>
+                        <th class="probaZone">Zone A</th>
+                        <th class="probaZone">Zone G</th>
+                        <th class="probaZone">Zone I</th>
+                        <th class="probaZone">Zone Globale</th>
+                    </tr>
+                    <tr>
+                        <th>Attaque</th>
+                        <td><span id="probaAttaqueA"></span></td>
+                        <td><span id="probaAttaqueG"></span></td>
+                        <td><span id="probaAttaqueI"></span></td>
+                        <td><span id="probaAttaqueGlobale"></span></td>
+                    </tr>
+                    <tr>
+                        <th>NonAttaque</th>
+                        <td><span id="probaNonAttaqueA"></span></td>
+                        <td><span id="probaNonAttaqueG"></span></td>
+                        <td><span id="probaNonAttaqueI"></span></td>
+                        <td><span id="probaNonAttaqueGlobale"></span></td>
+                    </tr>
+                </table>
+
+
             </div>
     </div>
 
