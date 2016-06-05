@@ -140,7 +140,7 @@
 
     <div class="row">
 
-        <div class="col-md-5">
+        <div class="col-md-3">
             <h1>Clustering</h1>
 
             <!-- form -->
@@ -154,7 +154,9 @@
             <div id="spinner" class="spinner" style="display:none;">
                     <img id="img-spinner" src="{% static 'img/ajax-loader-bar.gif' %}" alt="Loading"/>
             </div>
-            {% if isListEmpty %}
+
+            <!-- warning message -->
+            {% if isListEmpty and isFormSent %}
                 <div id="listEmpty"><p></p>Il n'y a pas d'attaque pour le mois renseigné</div>
             {% endif %}
         </div>

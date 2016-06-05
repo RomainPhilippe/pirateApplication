@@ -65,6 +65,7 @@ def home(request):
 def getCluster(request):
     # retrieval of the clusters from the selected month & years
     isListEmpty = True
+    isFormSent = False
 
     if request.method == 'POST':
         # retrieval of the datas from the entry form
@@ -80,15 +81,18 @@ def getCluster(request):
             month = int(month)
             year = int(year)
             dfFilter = dfClusters[(dfClusters['month'].astype(int) == month) & (dfClusters['year'].astype(int) == year)]
+            isFormSent = True
             if(len(dfFilter)>0):
                 print dfFilter
-                isFormSent = True
                 list_clusters = json.dumps(dfFilter.as_matrix().tolist())
                 isListEmpty = False
 
     else:
         # empty form
         form = InputFormCluster()
+
+    print "isListEmpty "+str(isListEmpty)
+    print "isFormSent "+str(isFormSent)
 
     return render(request, 'cluster.html', locals())
 
