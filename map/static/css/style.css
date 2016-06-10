@@ -4,7 +4,7 @@
     height: 400px;
 }
 #map{
-    width: 900px;
+    width: 700px;
     height: 500px;
 }
 
@@ -49,21 +49,8 @@ label {
     margin-right: 8px;
     opacity: 0.7;
 }
-#tableProba
-{
-    margin: 10px;
-}
-td, th /* Mettre une bordure sur les td ET les th */
-{
-    padding: 10px;
-    border: 1px solid black;
-}
 .title
 {
     font-size: 18px;
     text-decoration : underline;
-}
-.probaZone
-{
-    width: 500px;
 }
