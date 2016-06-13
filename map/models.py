@@ -15,7 +15,6 @@ class Area(models.Model):
         return self.zone
 
 class AreaHand(models.Model):
-    # TODO : recharger la base via le csv avant de rendre le projet
     area = models.CharField(max_length=3)
     count = models.IntegerField()
     fortnight = models.IntegerField()

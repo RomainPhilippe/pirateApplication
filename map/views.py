@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from django.shortcuts import render
 
 import numpy as np
@@ -80,7 +79,6 @@ def getCluster(request):
             dfFilter = dfClusters[(dfClusters['month'].astype(int) == month) & (dfClusters['year'].astype(int) == year)]
             isFormSent = True
             if(len(dfFilter)>0):
-                print dfFilter
                 list_clusters = json.dumps(dfFilter.as_matrix().tolist())
                 isListEmpty = False
 
@@ -88,8 +86,6 @@ def getCluster(request):
         # empty form
         form = InputFormCluster()
 
-    print "isListEmpty "+str(isListEmpty)
-    print "isFormSent "+str(isFormSent)
 
     return render(request, 'cluster.html', locals())
 
@@ -124,8 +120,6 @@ def resultPrediction(request):
             # dataframe building for the ML algo
             params = [boatType, month, fortnight, activity]
             dfTest = get_datas(list_areasId, params)
-            print "dfTest 1 : "
-            print dfTest
 
             # ML alog
             predict, probabilities = getTabPrediction(dfTest)
@@ -137,8 +131,6 @@ def resultPrediction(request):
     else:
         # empty form
         form = InputForm()
-
-    date = datetime.now()
 
     return render(request, 'prediction.html', locals())
 

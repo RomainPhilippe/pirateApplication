@@ -83,36 +83,36 @@
         if (weight == 0) {
             //grey
             return 'grey'
-        } else if (weight < 5) {
+        } else if (weight < 2) {
             //dark blue
             return '#00f';
-        } else if (weight < 10) {
+        } else if (weight < 4) {
             //blue
             return '#048cfc';
-        } else if (weight < 12) {
+        } else if (weight < 6) {
             //light blue
             return '#44f4fc';
-        } else if (weight < 15) {
+        } else if (weight < 8) {
             //green
             return '#a0fe44';
-        } else if (weight < 17) {
+        } else if (weight < 10) {
             //light green
             return '#44fe64';
-        } else if (weight < 20) {
+        } else if (weight < 12) {
             //yellow
             return '#fbf63c';
-        } else if (weight < 25) {
+        } else if (weight < 14) {
             //yellow orange
             return '#ff9900';
-        } else if (weight < 27) {
+        } else if (weight < 16) {
             //orange
-            return '#fca044';
-        } else if (weight < 30) {
+            return '#fc7b58';
+        } else if (weight < 18) {
             //red
             return '#fb4444';
         } else {
             //dark red
-            return '#fb1e1e';
+            return '#af1919';
         }
 
     }
@@ -190,39 +190,43 @@
                 <tbody>
                 <tr>
                     <td class="col-md-1" style= 'background-color: #00f'></td>
-                    <td class="col-md-2"> < 5 </td>
+                    <td class="col-md-2"> < 2 </td>
                 </tr>
                 <tr>
                     <td class="col-md-1" style= 'background-color: #048cfc'></td>
-                    <td class="col-md-2"> < 10 </td>
+                    <td class="col-md-2"> < 4 </td>
                 </tr>
                 <tr>
                     <td class="col-md-1" style= 'background-color: #44f4fc'></td>
-                    <td class="col-md-2"> < 12 </td>
+                    <td class="col-md-2"> < 6 </td>
                 </tr>
                 <tr>
                     <td class="col-md-1" style= 'background-color: #a0fe44'></td>
-                    <td class="col-md-2"> < 15 </td>
+                    <td class="col-md-2"> < 8 </td>
                 </tr>
                 <tr>
                     <td class="col-md-1" style= 'background-color: #44fe64'></td>
-                    <td class="col-md-2"> < 17 </td>
+                    <td class="col-md-2"> < 10 </td>
                 </tr>
                 <tr>
                     <td class="col-md-1" style= 'background-color: #fbf63c'></td>
-                    <td class="col-md-2"> < 20 </td>
+                    <td class="col-md-2"> < 12 </td>
                 </tr>
                 <tr>
                     <td class="col-md-1" style= 'background-color: #ff9900'></td>
-                    <td class="col-md-2"> < 25 </td>
+                    <td class="col-md-2"> < 14 </td>
                 </tr>
                 <tr>
-                    <td class="col-md-1" style= 'background-color: #fca044'></td>
-                    <td class="col-md-2"> < 27 </td>
+                    <td class="col-md-1" style= 'background-color: #fc7b58'></td>
+                    <td class="col-md-2"> < 16 </td>
                 </tr>
                 <tr>
                     <td class="col-md-1" style= 'background-color: #fb4444'></td>
-                    <td class="col-md-2"> < 30 </td>
+                    <td class="col-md-2"> < 18 </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1" style= 'background-color: #af1919'></td>
+                    <td class="col-md-2"> >= 18 </td>
                 </tr>
                 </tbody>
             </table>
